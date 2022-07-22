@@ -95,6 +95,7 @@ const endGame = (msg) => {
 const handleClick = (evt) => {
   // get x from ID of clicked cell
   let x = +evt.target.id;
+  console.log(x)
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
@@ -104,6 +105,7 @@ const handleClick = (evt) => {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
+
   placeInTable(y, x);
 
   // check for win
