@@ -9,8 +9,14 @@ let WIDTH = 7;
 let HEIGHT = 6;
 
 let currPlayer = 1; // active player: 1 or 2
+// board is an array of 6 arrays, each with 7 "cells"
+/* [[ud, ud, ud, ud, ud, ud, ud],
+    [ud, ud, ud, ud, ud, ud, ud],
+    [ud, ud, ud, ud, ud, ud, ud],
+    [ud, ud, ud, ud, ud, ud, ud],
+    [ud, ud, ud, ud, ud, ud, ud],
+    [ud, ud, ud, ud, ud, ud, ud]] */
 let board = []; // array of rows, each row is array of cells  (board[y][x])
-let board2 = [];
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -23,43 +29,49 @@ const makeBoard = () => {
   }
 }
 /** makeHtmlBoard: make HTML table and row of column tops. */
-console.log(board)
 
 const makeHtmlBoard = () => {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+  // selecting the table in HTML with the id of board, in HTML file
   let htmlBoard = document.getElementById('board');
 
   // TODO: add comment for this code
-  // creates element of type tr which is the top column to place pieces
-  // sets its id to column-top
-  // adds an event listener for clicking that runs the function handleClick
+
+  // creates a table row element
   let top = document.createElement("tr");
+  // sets its id to column-top
   top.setAttribute("id", "column-top");
+  // adds a click event listener that runs the function handleClick when you click on the top table row
   top.addEventListener("click", handleClick);
 
-  // creates headCells above each column where each piece can be placed to play the game
-  // sets each id attribute to x, which is a number between 0 - width
-  // then appends headCell to the top column created above
+  // loops for WIDTH amount of times
   for (let x = 0; x < WIDTH; x++) {
+    // creates a head cell which is a table data element, a single cell that contains data/can be manipulated in a table fashion
     let headCell = document.createElement("td");
+    // sets the newly created td to have an id of a number between 0 - WIDTH, representing each column of the board
     headCell.setAttribute("id", x);
+    // appends these head cells to the table row created in the previous step
     top.append(headCell);
   }
-  // then appends the top column the html board made on line 30
+  // appends the top row to the html board made on line 29
   htmlBoard.append(top);
 
   // TODO: add comment for this code
-  // creates rows up until the height of the board with cells up until the width of the board
-  // sets their id's to have coordinates of it's height-width (y-x)
-  // appends the cells to each row
+
+  // loops for HEIGHT amount of times
   for (let y = 0; y < HEIGHT; y++) {
+    // creates a table row element
     const row = document.createElement("tr");
+    // loops WIDTH amount of times
     for (let x = 0; x < WIDTH; x++) {
+      // creates table data cell
       const cell = document.createElement("td");
+      // sets its id to be HEIGHT-WIDTH representing the place on the board
       cell.setAttribute("id", `${y}-${x}`);
+      // appends the cell to the row
       row.append(cell);
     }
-    // appends each row with the cells to the htmlBoard
+    // appends the row of cells to the html <table> in the HTML file
     htmlBoard.append(row);
   }
 }
@@ -68,7 +80,15 @@ const makeHtmlBoard = () => {
 
 const findSpotForCol = (x) => {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  // find the lowest empty spot in the game board
+    // return the y coordinate or null if column is filled
+  for (let y = board.length - 1; y > 0; y--){
+    if (y !== null) {
+      return x;
+    }
+  }
+
+  // return 0;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -87,13 +107,15 @@ const placeInTable = (y, x) => {
 
 const endGame = (msg) => {
   // TODO: pop up alert message
-  alert(`Game complete! ${currPlayer} wins!`)
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 const handleClick = (evt) => {
   // get x from ID of clicked cell
+    // x will be 0 - 6 (7 total)
+    // evt.target is for the top selector column to choose where to place the piece
   let x = +evt.target.id;
   console.log(x)
 
@@ -105,7 +127,7 @@ const handleClick = (evt) => {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
-
+  board[y][x] = currPlayer;
   placeInTable(y, x);
 
   // check for win
@@ -115,9 +137,15 @@ const handleClick = (evt) => {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
+  if (board.every(row=>{row.every(cell=>cell===null)})) {
+    endGame('Tie!');
+  }
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+    // how do we switch players?
+    // if currPlayer === 1, on this CLICK, we switch currPlayer to 2
+  currPlayer === 1 ? currPlayer = 2 : currPlayer = 1
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
