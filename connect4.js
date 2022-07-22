@@ -82,9 +82,9 @@ const findSpotForCol = (x) => {
   // TODO: write the real version of this, rather than always returning 0
   // find the lowest empty spot in the game board
     // return the y coordinate or null if column is filled
-  for (let y = board.length - 1; y > 0; y--){
-    if (y !== null) {
-      return x;
+  for (let y = HEIGHT - 1; y >= 0; y--){
+    if (!board[y][x]) {
+      return y;
     }
   }
 
@@ -117,7 +117,6 @@ const handleClick = (evt) => {
     // x will be 0 - 6 (7 total)
     // evt.target is for the top selector column to choose where to place the piece
   let x = +evt.target.id;
-  console.log(x)
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
