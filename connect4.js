@@ -136,8 +136,8 @@ const handleClick = (evt) => {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-  if (board.every(row=>{row.every(cell=>cell===null)})) {
-    endGame('Tie!');
+  if (board.every(row => {row.every(cell => cell !== undefined)})) {
+    return endGame('Tie!');
   }
 
   // switch players
